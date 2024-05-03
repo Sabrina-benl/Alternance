@@ -1,13 +1,20 @@
-CC= gcc
-OPTIONS=-W -Wall -std=c89 -pedantic -O2                                         
-EXEC_FILES= calendrier
+CC = gcc
+OPTION = -W -Wall -std=gnu89 -pedantic -O2 -g
+all : menu2
 
-all : $(EXEC_FILES)
-calendrier : calendrier.c tests.o
-	$(CC) $(OPTIONS) $^ -o $@
+menu2 : menu2.o lutin.o ligne.o
+	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` menu2.o lutin.o ligne.o `pkg-config --libs-only-l MLV` -o menu2
 
-tests.o : tests.c
-	$(CC) $(OPTIONS) -c tests.c
 
-clean:
-	rm -rf $(EXEC_FILES) *.o
+lutin.o : lutin.c
+	$(CC) $(OPTION) -c lutin.c
+
+ligne.o : ligne.c
+	$(CC) $(OPTION) -c ligne.c
+
+
+menu2.o : menu2.c
+	$(CC) $(OPTION) -c menu2.c
+
+clean :
+	rm -rf *.o *~ menu2
